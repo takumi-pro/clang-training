@@ -1,2 +1,2 @@
-all:
-	clang ./main.c && ./a.out
+run:
+	clang ./main.c -o main && ./main
