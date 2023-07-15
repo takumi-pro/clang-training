@@ -1,2 +1,5 @@
+compile:
+	gcc main.c -o main
+
 run:
-	clang ./main.c -o main && ./main
+	gcc main.c -o main && ./main
