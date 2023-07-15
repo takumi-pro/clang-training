@@ -1,63 +1,44 @@
 #include <stdio.h>
 
-int address() {
+#define rep(n) for(int i = 0; i < n; i++)
+
+int addressIndirection() {
+  printf("===== AddressOperator =====\n");
   int n = 100;
   printf("n: %d\n", n);
-  printf("n address: %p", &n);
+  printf("n address operator: %p\n", &n);
+  printf("indirection operator: %d", *(&n));
+  printf("\n\n");
   return 0;
 };
 
-int main() {
-
-  address();
+int pointerVariable() {
+  printf("===== PointerVariable =====\n");
+  int n = 100;
+  int *p = &n;
+  printf("n address: %p\n", p);
+  printf("n: %d", *p);
+  printf("\n\n");
   return 0;
-  // // 構造体のポインタ
-  // struct Test {
-  //   char name[10];
-  //   int num;
-  //   int num2;
-  // };
+}
 
-  // struct Test *testPointer;
+int doubleArrayElements(int *array, int n) {
+  printf("===== DoubleArrayElements =====\n");
+  printf("Array Element: ");
+  rep(n) printf("%d, ", array[i]);
+  printf("\n");
+  rep(n) array[i] *= 2;
+  printf("Double Array Element: ");
+  rep(n) printf("%d, ", array[i]);
+  printf("\n\n");
+  return 0;
+}
 
-  // printf("struct T: %p\n", testPointer);
-  // int *testPointerNum = &testPointer->num;
-  // int *testPointerNum2 = &testPointer->num2;
-  // char *testPointerName = testPointer->name;
-  // printf("struct name: %p\n", testPointerName);
-  // printf("struct num: %p\n", testPointerNum);
-  // printf("struct num2: %p\n", testPointerNum2);
+int main() {
+  addressIndirection();
+  pointerVariable();
 
-  // // 配列のポインタ
-  // // int array[10];
-  // // int *p, *t, *r;
-  // // p = array;
-  // // t = &array[0];
-  // // r = &array[1];
-  // // array[0] = 0;
-  // // int e = array[0];
-
-  // // printf("p: %p\n", p);
-  // // printf("t: %p\n", t);
-  // // printf("r: %p\n", r);
-  // // printf("e: %d", e);
-
-  // int array[10];
-  // int n;
-  // scanf("%d", &n);
-  // int arr[n];
-  // for (int i=0; i<n; i++) {
-  //   arr[i] = i;
-  // };
-  // for (int i=0; i<n; i++) {
-  //   printf("arr %d: %d", i, arr[i]);
-  // }
-  // for (int i=0; i < 10; i++) array[i] = i + 1;
-  // int *topPtr;
-  // topPtr = &array[0];
-
-  // printf("topPtr: %p\n", topPtr);
-  // printf("array pointer: %p", array);
-  // printf("array pointer: %d", topPtr[2]);
-  // return 0;
+  int array[5] = {1,2,3,4,5};
+  doubleArrayElements(array, 5);
+  return 0;
 }
