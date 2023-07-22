@@ -63,7 +63,7 @@ Vec* vector_new(int32_t capacity) {
 };
 
 /*
-* @function insert
+* @function vector_insert
 * @description 任意のindexに任意の値を挿入する関数
 * @param arr Vec型のポインタ
 * @param index 値を挿入するインデックス
@@ -78,7 +78,7 @@ void vector_insert(Vec* arr, int index, void* value) {
   // メモリ領域がいっぱいになったら再割り当て
   arr->size++;
   if (arr->size == arr->capacity) {
-    // メモリ領域を2倍確保
+    // メモリ領域をcapacity分追加
     arr->capacity += arr->capacity;
 
     // メモリを capasicy × (void*のサイズ)分 再割り当て
@@ -99,12 +99,88 @@ void vector_insert(Vec* arr, int index, void* value) {
 }
 
 /*
-* @function push
+* @function vector_delete
+* @description indexの項目を削除しindex以降の要素を左にずらす関数
+* @params vec Vec構造体のポインタ
+* @params index 削除したいindex
+*/
+void vector_delete(Vec* arr, int index) {
+  if (index < 0 || index >= arr->size) {
+    printf("Invalid index\n");
+    exit(1);
+  };
+
+  // index以降の要素を左にずらす
+  for (int i = index; i < arr->size - 1; ++i) {
+    arr->values[i] = arr->values[i + 1];
+  };
+
+  --arr->size;
+}
+
+/*
+* @function vector_find
+* @description 指定された値を探して見つかったらindexを返す関数
+* @params vec Vec構造体のポインタ
+* @params value 検索する値
+* @return 指定した値にヒットした最初のindex/ヒットしなければ-1
+*/
+int vector_find(Vec* arr, int* value) {
+  for (int i = 0; i < arr->size; ++i) {
+    if (*(int*)arr->values[i] == *value) return i;
+  }
+  return -1;
+}
+
+/*
+* @function vector_push
 * @description 末尾に指定した値を追加する関数
 * @param value 末尾に追加する値
 */
-void vector_push(void* value) {
-  
+void vector_push(Vec* arr, void* value) {
+  // sizeとcapacityが同じ場合はメモリ領域の再割り当て
+  arr->size++;
+  if (arr->size == arr->capacity) {
+    // メモリ領域を2倍確保
+    arr->capacity += arr->capacity;
+
+    // メモリを capasicy × (void*のサイズ)分 再割り当て
+    void** tmp = (void**)realloc(arr->values, arr->capacity * sizeof(void*));
+    if (tmp == NULL) {
+      printf("Memory allocation failed\n");
+      exit(1);
+    }
+    arr->values = tmp;
+  }
+
+  arr->values[arr->size - 1] = value;
+}
+
+/*
+* @function vector_at
+* @description 指定したindexの値を返す関数
+* @params index 取得したい値のindex
+* @return 対応するindexの値のポインタ
+*/
+void* vector_at(Vec* arr, int index) {
+  if (index < 0 || index >= arr->size) {
+    printf("Invalid index\n");
+    exit(1);
+  }
+
+  return arr->values[index];
+}
+
+/*
+* @function vector_pop
+* @description 末尾の要素を削除して値を返す関数
+* @params vec Vec構造体のポインタ
+* @return 削除した値のポインタ
+*/
+void* vector_pop(Vec* arr) {
+  if (arr->size == 0) return NULL;
+  --arr->size;
+  return arr->values[arr->size];
 }
 
 int main() {
@@ -114,24 +190,45 @@ int main() {
   int array[5] = {1,2,3,4,5};
   doubleArrayElements(array, 5);
 
-  Vec* vec = vector_new(10);
+// 動的配列
+  Vec* vec = vector_new(4);
   int a = 23;
   int num1 = 100;
   int num2 = 2222;
   char* s = "hello";
+  int num3 = 99999;
+
+  printf("capacity: %d\n", vec->capacity);
+  printf("size: %d\n", vec->size);
+
   vector_insert(vec, 0, &a);
-  vector_insert(vec, 1, s);
+  printf("capacity: %d\n", vec->capacity);
+  printf("size: %d\n", vec->size);
+
+  vector_insert(vec, 1, &a);
+  printf("capacity: %d\n", vec->capacity);
+  printf("size: %d\n", vec->size);
+
   vector_insert(vec, 2, &num1);
-  printf("capacity: %d\n",vec->capacity);
-  printf("size: %d\n",vec->size);
-  printf("arr: %p\n", vec->values);
-  printf("arr: %p\n", vec->values);
-  printf("arr[0]: %d\n", *(int*)(vec->values[0]));
-  printf("arr[1]: %s\n", (char*)(vec->values[1]));
-  printf("arr[2]: %d\n", *(int*)(vec->values[2]));
-  vector_insert(vec, 2, &num2);
-  printf("arr[2]: %d\n", *(int*)(vec->values[2]));
-  printf("arr[3]: %d\n", *(int*)(vec->values[3]));
+  printf("capacity: %d\n", vec->capacity);
+  printf("size: %d\n", vec->size);
+
+  vector_insert(vec, 2, &num1);
+  printf("capacity: %d\n", vec->capacity);
+  printf("size: %d\n", vec->size);
+
+  vector_push(vec, &num1);
+  vector_push(vec, &num2);
+  vector_push(vec, &num2);
+  vector_push(vec, &num3);
+  vector_delete(vec, 5);
+
+  for (int i = 0; i < vec->size; ++i) {
+    printf("arr[%d]: %d\n", i, *(int*)(vec->values[i]));
+  };
+  int num4 = 45;
+  printf("find 100: %d\n", vector_find(vec, &(num4)));
+
   free(vec->values);
   free(vec);
   return 0;
