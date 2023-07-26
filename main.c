@@ -36,6 +36,47 @@ int doubleArrayElements(int *array, int n) {
   return 0;
 }
 
+// 連結リストの実装
+typedef struct cell {
+  int data;
+  struct cell *next;
+} Cell;
+
+typedef struct {
+  Cell *top;
+} List;
+
+/*
+* @description セルを生成する関数
+* @params data セルに格納する値
+* @params *next 次のセルへのポインタ
+*/
+Cell *make_cell(int data, Cell *cell) {
+  Cell *newcell = malloc(sizeof(Cell));
+  if (newcell == NULL) {
+    printf("memory allocation failed");
+    exit(1);
+  }
+  newcell->data = data;
+  newcell->next = cell;
+  return newcell;
+}
+
+/*
+* @description リストを生成する関数
+* @return List構造体のポインタ
+*/
+List* make_list() {
+  List *list = malloc(sizeof(List));
+  if (list == NULL) {
+    printf("memory allocation failed");
+    exit(1);
+  }
+  // セルをセットする
+  list->top = make_cell(0, NULL);
+  return list;
+}
+
 int main() {
   addressIndirection();
   pointerVariable();
@@ -43,7 +84,7 @@ int main() {
   int array[5] = {1,2,3,4,5};
   doubleArrayElements(array, 5);
 
-// 動的配列
+  // 動的配列
   Vec* vec = vector_new(4);
   int a = 23;
   int num1 = 100;
@@ -84,5 +125,10 @@ int main() {
 
   free(vec->values);
   free(vec);
+
+  // 連結リスト
+  printf("========== list ==========\n");
+  List* list = make_list();
+  printf("list top: %p", list->top);
   return 0;
 }
