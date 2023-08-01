@@ -1,21 +1,18 @@
 TARGET = main
 CC = gcc
-OBJS = main.c vector.c
+OBJS = main.o vector.o linked_list.o
 CFLAGS = 
 
 .PHONY: all clean
 
-main: main.o vector.o linked_list.o
-	$(CC) $(CFLAGS) -o $@ main.o vector.o linked_list.o && ./$(TARGET)
+all: $(TARGET)
+	./$(TARGET)
 
-main.o: main.c vector.h linked_list.h
-	$(CC) $(CFLAGS) -c main.c
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
-vector.o: vector.c vector.h
-	$(CC) $(CFLAGS) -c vector.c
-
-linked_list.o: linked_list.c linked_list.h
-	$(CC) $(CFLAGS) -c linked_list.c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
 
 clean:
 	rm -f $(TARGET)
