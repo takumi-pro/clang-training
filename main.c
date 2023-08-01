@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "vector.h"
 #include "linked_list.h"
+#include "stack.h"
 
 #define rep(n) for(int i = 0; i < n; i++)
 
@@ -15,7 +16,7 @@ int main() {
   int num2 = 2222;
   char* s = "hello";
   int num3 = 99999;
-  
+
   printf("capacity: %d\n", vec->capacity);
   printf("size: %d\n", vec->size);
 
@@ -64,5 +65,18 @@ int main() {
 
   free(list);
   free(list->top);
+
+  // stack
+  printf("\n");
+  printf("========== stack ==========\n");
+  Stack* stack = stack_init();
+  stack_push(stack, 10);
+  stack_push(stack, 20);
+  stack_push(stack, 30);
+  for (int i = 0; i < 3; i++) {
+    printf("%d, ", stack_top(stack));
+    stack_pop(stack);
+  }
+  free(stack);
   return 0;
 }

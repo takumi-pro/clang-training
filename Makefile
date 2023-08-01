@@ -1,6 +1,6 @@
 TARGET = main
 CC = gcc
-OBJS = main.o vector.o linked_list.o
+OBJS = main.o vector.o linked_list.o stack.o
 CFLAGS = 
 
 .PHONY: all clean
